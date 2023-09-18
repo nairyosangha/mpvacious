@@ -46,7 +46,12 @@ function Subtitle:is_valid()
 end
 
 Subtitle.__eq = function(lhs, rhs)
-    return lhs['start'] == rhs['start']
+    if lhs['text'] == rhs['text'] then
+        -- non empty consecutive lines with the same text should be treated as equal
+        -- the text will be empty for image based subs, in which case we fall back on the start time
+        return #lhs['text'] > 0 or lhs['start'] == rhs['start']
+    end
+    return false
 end
 
 Subtitle.__lt = function(lhs, rhs)
