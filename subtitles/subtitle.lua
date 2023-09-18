@@ -46,7 +46,7 @@ function Subtitle:is_valid()
 end
 
 Subtitle.__eq = function(lhs, rhs)
-    return lhs['text'] == rhs['text']
+    return lhs['start'] == rhs['start']
 end
 
 Subtitle.__lt = function(lhs, rhs)

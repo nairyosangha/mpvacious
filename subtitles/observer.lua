@@ -223,8 +223,8 @@ self.init = function(menu, config)
     -- to prevent it from being reset when the user reloads the config file.
     autoclip_enabled = self.config.autoclip
 
-    mp.observe_property("sub-text", "string", handle_primary_sub)
-    mp.observe_property("secondary-sub-text", "string", handle_secondary_sub)
+    mp.observe_property("sub-start", "number", handle_primary_sub)
+    mp.observe_property("secondary-sub-start", "number", handle_secondary_sub)
 end
 
 return self
