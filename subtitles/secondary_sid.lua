@@ -72,7 +72,7 @@ end
 
 local function on_mouse_move(_, state)
     -- state = {x=int,y=int, hover=true|false, }
-    if self.visibility == 'auto' and state ~= nil then
+    if mp.get_property_native('secondary-sid') and self.visibility == 'auto' and state ~= nil then
         mp.set_property_bool(
                 'secondary-sub-visibility',
                 state.hover and (state.y / window_height()) < self.config.secondary_sub_area
@@ -83,7 +83,7 @@ end
 local function on_file_loaded()
     -- If secondary sid is not already set, try to find and set it.
     local secondary_sid = mp.get_property_native('secondary-sid')
-    if secondary_sid == false then
+    if secondary_sid == false and self.config.secondary_sub_auto_load == true then
         secondary_sid = find_best_secondary_sid()
         if secondary_sid ~= nil then
             mp.set_property_native('secondary-sid', secondary_sid)
@@ -124,7 +124,9 @@ local function switch_secondary_sid(direction)
     local subtitle_tracks = h.filter(h.get_loaded_tracks('sub'), function(track)
         return track.id ~= secondary_sid and track.id ~= primary_sid
     end)
-    table.sort(subtitle_tracks, function(track1, track2) return track1.id < track2.id end)
+    table.sort(subtitle_tracks, function(track1, track2)
+        return (is_accepted_language(track1.lang) and not is_accepted_language(track2.lang)) or (track1.id < track2.id)
+    end)
 
     local new_secondary_sub = { id = false, title = "removed" }
 
